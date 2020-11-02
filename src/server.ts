@@ -5,8 +5,11 @@ import routes from './routes';
 /** Define app como o retorno da função express() */
 const app = express();
 
-/** Escuta método get na rota raiz (/) e responde com objeto json */
-app.get('/', (request, response) => response.json({ message: 'Hello World' }));
+/** Aplicacao entende formato json */
+app.use(express.json());
+
+/** Inicializa rotas */
+app.use(routes);
 
 /** Inicializa app na porta 3333 */
 app.listen(3333, () => {
