@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { startOfHour, parseISO, isEqual } from 'date-fns';
-import Appointment from '../models/Appointment';
+import { startOfHour, parseISO } from 'date-fns';
+import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
 /**
  * Importa metodos de date-fns
@@ -11,8 +11,8 @@ import Appointment from '../models/Appointment';
 /** Cria roteador de agendamentos */
 const appointmentsRouter = Router();
 
-/** Cria lista de agendamentos do tipo Appointment */
-const appointments: Appointment[] = [];
+/** Instancia lista de agendamentos do tipo Appointment */
+const appointmentsRepository = new AppointmentsRepository();
 
 /** Escuta método get na rota raiz (/) e responde com objeto json */
 appointmentsRouter.post('/', (request, response) => {
@@ -26,8 +26,8 @@ appointmentsRouter.post('/', (request, response) => {
    * Avalia se existe agendamento no mesmo horario enviado no corpo da
    * requisicao e retorna o primeiro appointment encontrado
    */
-  const findAppointmentInSameDate = appointments.find(appointment =>
-    isEqual(parsedDate, appointment.date),
+  const findAppointmentInSameDate = appointmentsRepository.findByDate(
+    parsedDate,
   );
 
   /** Se encontrou appointment, retorna erro */
@@ -37,11 +37,8 @@ appointmentsRouter.post('/', (request, response) => {
       .json({ message: 'This appointment is already booked' });
   }
 
-  /** Cria novo appointment */
-  const appointment = new Appointment(provider, parsedDate);
-
   /** Adiciona agendamento à lista de agendamentos */
-  appointments.push(appointment);
+  const appointment = appointmentsRepository.create(provider, parsedDate);
 
   /** Adiciona appointment criado na lista de appointments */
   return response.json(appointment);
