@@ -1,22 +1,15 @@
 import { Router } from 'express';
-import { v4 } from 'uuid';
+import { startOfHour, parseISO, isEqual } from 'date-fns';
+import Appointment from '../models/Appointment';
 
 /**
  * Importa metodos de date-fns
  * parseIso: converte String para objeto Date nativo do JavaScript
  * startOfHour: pega data e coloque minuto, segundo, milisegundos como zero
  */
-import { startOfHour, parseISO, isEqual } from 'date-fns';
 
 /** Cria roteador de agendamentos */
 const appointmentsRouter = Router();
-
-/** Define tipo Appointment através de uma interface */
-interface Appointment {
-  id: string;
-  provider: string;
-  date: Date;
-}
 
 /** Cria lista de agendamentos do tipo Appointment */
 const appointments: Appointment[] = [];
@@ -45,17 +38,13 @@ appointmentsRouter.post('/', (request, response) => {
   }
 
   /** Cria novo appointment */
-  const appointment = {
-    id: v4(),
-    provider,
-    date: parsedDate,
-  };
+  const appointment = new Appointment(provider, parsedDate);
 
   /** Adiciona agendamento à lista de agendamentos */
   appointments.push(appointment);
 
   /** Adiciona appointment criado na lista de appointments */
-  return response.json({ message: 'Hello World' });
+  return response.json(appointment);
 });
 
 /** Exporta roteador de agendamentos */
