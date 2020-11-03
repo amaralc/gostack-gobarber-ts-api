@@ -1,17 +1,10 @@
 import { Router } from 'express';
+import appointmentsRouter from './appointments.routes';
 
+/** Cria roteador */
 const routes = Router();
 
-/** Escuta método get na rota raiz (/) e responde com objeto json */
-routes.post('/users', (request, response) => {
-  const { name, email } = request.body;
-
-  const user = {
-    name,
-    email,
-  };
-
-  return response.json(user);
-});
+/** Usa appointmentsRouter para qualquer rota que inicia com /appointments */
+routes.use('/appointments', appointmentsRouter);
 
 export default routes;
