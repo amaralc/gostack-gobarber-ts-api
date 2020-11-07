@@ -1,6 +1,11 @@
 import { isEqual } from 'date-fns';
 import Appointment from '../models/Appointment';
 
+interface createAppointmentDTO {
+  date: Date;
+  provider: string;
+}
+
 class AppointmentRepository {
   /** Cria variável acessível apenas dentro da classe */
   private appointments: Appointment[];
@@ -30,9 +35,9 @@ class AppointmentRepository {
   }
 
   /** Crie método acessível fora da classe para criar novo appointment */
-  public create(provider: string, date: Date): Appointment {
+  public create({ provider, date }: createAppointmentDTO): Appointment {
     /** Define appointment como novo Appointment */
-    const appointment = new Appointment(provider, date);
+    const appointment = new Appointment({ provider, date });
 
     /** Adiciona appointment à lista de appointments */
     this.appointments.push(appointment);
