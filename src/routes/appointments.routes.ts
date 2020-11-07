@@ -46,7 +46,10 @@ appointmentsRouter.post('/', (request, response) => {
   }
 
   /** Adiciona agendamento à lista de agendamentos */
-  const appointment = appointmentsRepository.create(provider, parsedDate);
+  const appointment = appointmentsRepository.create({
+    provider,
+    date: parsedDate,
+  });
 
   /** Adiciona appointment criado na lista de appointments */
   return response.json(appointment);
