@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import { startOfHour, parseISO } from 'date-fns';
-import AppointmentsRepository from '../repositories/AppointmentsRepository';
-
 /**
  * Importa metodos de date-fns
  * parseIso: converte String para objeto Date nativo do JavaScript
  * startOfHour: pega data e coloque minuto, segundo, milisegundos como zero
  */
+import { startOfHour, parseISO } from 'date-fns';
+import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
 /** Cria roteador de agendamentos */
 const appointmentsRouter = Router();
@@ -14,7 +13,16 @@ const appointmentsRouter = Router();
 /** Instancia lista de agendamentos do tipo Appointment */
 const appointmentsRepository = new AppointmentsRepository();
 
-/** Escuta método get na rota raiz (/) e responde com objeto json */
+/** Escuta método get na rota raiz e retorna todos os agendamentos */
+appointmentsRouter.get('/', (request, response) => {
+  /** Cria variável para armazenar agendamentos */
+  const appointments = appointmentsRepository.all();
+
+  /** Retorna agendamentos */
+  return response.json(appointments);
+});
+
+/** Escuta método post na rota raiz (/) e responde com objeto json */
 appointmentsRouter.post('/', (request, response) => {
   /** Busca provider e date de dentro do corpo da requisicao */
   const { provider, date } = request.body;

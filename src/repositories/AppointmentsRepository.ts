@@ -10,6 +10,11 @@ class AppointmentRepository {
     this.appointments = [];
   }
 
+  /** Método público que retorna todos os agendamentos no formato 'array de appointments' */
+  public all(): Appointment[] {
+    return this.appointments;
+  }
+
   /**
    * Método público para encontrar appointment a partir de uma data.
    * Método pode retornar tipo Appointment OU null
