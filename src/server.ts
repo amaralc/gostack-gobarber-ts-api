@@ -2,6 +2,9 @@
 import express from 'express';
 import routes from './routes';
 
+/** Importa conexão sem passar para nenhuma variável */
+import './database';
+
 /** Define app como o retorno da função express() */
 const app = express();
 
