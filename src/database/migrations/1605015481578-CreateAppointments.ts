@@ -19,7 +19,7 @@ export default class CreateAppointments1605015481578
             /** Nome de uma coluna */
             name: 'id',
             /** Tipo da coluna */
-            type: 'varchar',
+            type: 'uuid',
             /** Chave primaria: (true | false) */
             isPrimary: true,
             /** Define como uuid (mais recomendado, inclusive por segurança) */
