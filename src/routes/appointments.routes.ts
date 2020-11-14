@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { getCustomRepository } from 'typeorm';
 /**
  * Importa metodos de date-fns
  * parseIso: converte String para objeto Date nativo do JavaScript
@@ -11,20 +12,20 @@ import CreateAppointmentService from '../services/CreateAppointmentService';
 /** Cria roteador de agendamentos */
 const appointmentsRouter = Router();
 
-/** Instancia lista de agendamentos do tipo Appointment */
-const appointmentsRepository = new AppointmentsRepository();
-
 /** Escuta método get na rota raiz e retorna todos os agendamentos */
-appointmentsRouter.get('/', (request, response) => {
-  /** Cria variável para armazenar agendamentos */
-  const appointments = appointmentsRepository.all();
+appointmentsRouter.get('/', async (request, response) => {
+  /** Cria appointments repository */
+  const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+
+  /** Cria variável para armazenar todos os agendamentos */
+  const appointments = await appointmentsRepository.find();
 
   /** Retorna agendamentos */
   return response.json(appointments);
 });
 
 /** Escuta método post na rota raiz (/) e responde com objeto json */
-appointmentsRouter.post('/', (request, response) => {
+appointmentsRouter.post('/', async (request, response) => {
   try {
     /** Busca provider e date de dentro do corpo da requisicao */
     const { provider, date } = request.body;
@@ -33,12 +34,10 @@ appointmentsRouter.post('/', (request, response) => {
     const parsedDate = parseISO(date);
 
     /** Instancia serviço */
-    const createAppointment = new CreateAppointmentService(
-      appointmentsRepository,
-    );
+    const createAppointment = new CreateAppointmentService();
 
     /** Executa serviço (cria appointment) */
-    const appointment = createAppointment.execute({
+    const appointment = await createAppointment.execute({
       date: parsedDate,
       provider,
     });

@@ -1,49 +1,28 @@
-import { isEqual } from 'date-fns';
+import { EntityRepository, Repository } from 'typeorm';
+
 import Appointment from '../models/Appointment';
 
-interface createAppointmentDTO {
-  date: Date;
-  provider: string;
-}
-
-class AppointmentRepository {
-  /** Cria variável acessível apenas dentro da classe */
-  private appointments: Appointment[];
-
-  constructor() {
-    /** Define lista de appointments */
-    this.appointments = [];
-  }
-
-  /** Método público que retorna todos os agendamentos no formato 'array de appointments' */
-  public all(): Appointment[] {
-    return this.appointments;
-  }
-
+@EntityRepository(Appointment)
+class AppointmentRepository extends Repository<Appointment> {
+  /** Acima, entre <> : parametro de uma tipagem */
   /**
    * Método público para encontrar appointment a partir de uma data.
    * Método pode retornar tipo Appointment OU null
    */
-  public findByDate(date: Date): Appointment | null {
+  public async findByDate(date: Date): Promise<Appointment | null> {
     /** Encontra appointment em lista de appointments */
-    const findAppointment = this.appointments.find(appointment =>
-      isEqual(date, appointment.date),
-    );
+    // const findAppointment = this.appointments.find(appointment =>
+    //   isEqual(date, appointment.date),
+    // );
+
+    /** Chama método assincrono para encontrar um appointment */
+    const findAppointment = await this.findOne({
+      /** Onde a coluna 'date' é igual ao parâmetro 'date' */
+      where: { date },
+    });
 
     /** Retorna appointment encontrado e se não encontrar, retorna nulo */
     return findAppointment || null;
-  }
-
-  /** Crie método acessível fora da classe para criar novo appointment */
-  public create({ provider, date }: createAppointmentDTO): Appointment {
-    /** Define appointment como novo Appointment */
-    const appointment = new Appointment({ provider, date });
-
-    /** Adiciona appointment à lista de appointments */
-    this.appointments.push(appointment);
-
-    /** Retorna appointment */
-    return appointment;
   }
 }
 
