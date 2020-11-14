@@ -24,6 +24,8 @@ export default class CreateAppointments1605015481578
             isPrimary: true,
             /** Define como uuid (mais recomendado, inclusive por segurança) */
             generationStrategy: 'uuid',
+            /** Define geração automática de id */
+            default: 'uuid_generate_v4()',
           },
           /** Outra coluna */
           {
