@@ -27,8 +27,8 @@ appointmentsRouter.get('/', async (request, response) => {
 /** Escuta método post na rota raiz (/) e responde com objeto json */
 appointmentsRouter.post('/', async (request, response) => {
   try {
-    /** Busca provider e date de dentro do corpo da requisicao */
-    const { provider, date } = request.body;
+    /** Busca provider_id e date de dentro do corpo da requisicao */
+    const { provider_id, date } = request.body;
 
     /** Ajusta formato da data */
     const parsedDate = parseISO(date);
@@ -39,7 +39,7 @@ appointmentsRouter.post('/', async (request, response) => {
     /** Executa serviço (cria appointment) */
     const appointment = await createAppointment.execute({
       date: parsedDate,
-      provider,
+      provider_id,
     });
 
     /** Devolve resposta à requisição */

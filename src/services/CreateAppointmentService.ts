@@ -12,7 +12,7 @@ import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
 /** Cria interface para recebimento de dados */
 interface Request {
-  provider: string;
+  provider_id: string;
   date: Date;
 }
 
@@ -23,7 +23,7 @@ interface Request {
 /** Classe para criação de appointment */
 class CreateAppointmentService {
   /** Único método da classe, público, e que neste caso cria um appointment */
-  public async execute({ provider, date }: Request): Promise<Appointment> {
+  public async execute({ provider_id, date }: Request): Promise<Appointment> {
     /** Define custom repository */
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);
 
@@ -45,7 +45,7 @@ class CreateAppointmentService {
 
     /** Cria instância da classe de appointment */
     const appointment = appointmentsRepository.create({
-      provider,
+      provider_id,
       date: appointmentDate,
     });
 
