@@ -41,6 +41,19 @@ export default class CreateAppointments1605015481578
             type: 'timestamp with time zone',
             isNullable: false,
           },
+          /** Outra coluna */
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            /** Valor default deve ser o timestamp de agora */
+            default: 'now()',
+          },
+          /** Outra coluna */
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
         ],
       }),
     );
