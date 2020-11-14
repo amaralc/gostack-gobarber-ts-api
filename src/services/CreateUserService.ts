@@ -3,6 +3,7 @@
  * com funcionalidades basicas, create, update, delete, etc.
  */
 import { getRepository } from 'typeorm';
+import { hash } from 'bcryptjs';
 import User from '../models/User';
 
 interface Request {
@@ -26,11 +27,17 @@ class CreateUserService {
       throw new Error('Email address already used');
     }
 
+    /**
+     * Define hash da senha, passando hash e tamanho do 'salt' que sera utilizado
+     * Ref: https://en.wikipedia.org/wiki/Salt_(cryptography)
+     */
+    const hashedPassword = await hash(password, 8);
+
     /** Cria instancia de usuario */
     const user = usersRepository.create({
       name,
       email,
-      password,
+      password: hashedPassword,
     });
 
     /** Salva usuario na base de dados */
