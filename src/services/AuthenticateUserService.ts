@@ -7,8 +7,13 @@ interface Request {
   password: string;
 }
 
+/**
+ * Define Response com todas as propriedades configuradas como opcionais
+ * Motivo: Permitir que informacoes sejam deletadas na rota que as usa (ex.: password)
+ * Ref: https://www.typescriptlang.org/docs/handbook/utility-types.html
+ */
 interface Response {
-  user: User;
+  user: Partial<User>;
 }
 
 export default class AuthenticateUserService {
