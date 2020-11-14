@@ -1,5 +1,15 @@
 /** Importa entidade (algo a ser salvo no banco de dados) */
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
+import User from './User';
 
 /**
  * Utiliza experimental decorators (@) para definir que o model
@@ -17,11 +27,22 @@ class Appointment {
 
   /** Define provider como coluna (nao gerada) do tipo string (padrão) */
   @Column()
-  provider: string;
+  provider_id: string;
+
+  /** Relacionamento tipo 'muitos' deste model para 'um' do model referenciado */
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'provider_id' })
+  provider: User;
 
   /** Define date como tipo 'timestamp with time zone' */
   @Column('timestamp with time zone')
   date: Date;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
 
 export default Appointment;
