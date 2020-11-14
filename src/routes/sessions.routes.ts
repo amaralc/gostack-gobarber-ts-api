@@ -3,8 +3,6 @@ import { Router } from 'express';
 /** Importa service */
 import AuthenticateUserService from '../services/AuthenticateUserService';
 
-/** Cria interface de resposta customizada */
-
 /** Cria roteador */
 const sessionsRouter = Router();
 
