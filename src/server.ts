@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 /** Importa express */
 import express from 'express';
 import routes from './routes';
