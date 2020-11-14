@@ -1,5 +1,7 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
+
 import User from '../models/User';
 
 interface Request {
@@ -14,6 +16,7 @@ interface Request {
  */
 interface Response {
   user: Partial<User>;
+  token: string;
 }
 
 export default class AuthenticateUserService {
@@ -37,9 +40,24 @@ export default class AuthenticateUserService {
       throw new Error('Incorrect combination of email and password');
     }
 
+    /**
+     * Define token utilizando o sign do jsonwebtoken.
+     * ATENCAO: Nao colocar informacoes sensiveis
+     */
+    const token = sign({}, 'bbbbbfec5c7a007ecd13caf55c6a4d6e', {
+      /** Id do usuario */
+      subject: user.id,
+      /**
+       * Tempo de expiracao
+       * Ref: avaliar etrategia de 'refresh token'
+       */
+      expiresIn: '1d',
+    });
+
     /** Se passou por todas as validacoes retorna resposta */
     return {
       user,
+      token,
     };
   }
 }
