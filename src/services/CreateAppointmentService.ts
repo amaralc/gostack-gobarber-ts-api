@@ -1,4 +1,5 @@
 import { startOfHour } from 'date-fns';
+import { getCustomRepository } from 'typeorm';
 
 import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
@@ -21,17 +22,11 @@ interface Request {
 
 /** Classe para criação de appointment */
 class CreateAppointmentService {
-  /** Cria variável privada e define tipo */
-  private appointmentsRepository: AppointmentsRepository;
-
-  /** Define método de inicialização do service declarando parâmetro de entrada e tipo */
-  constructor(appointmentsRepository: AppointmentsRepository) {
-    /** Pega parâmetro de entrada e atribui valor à variável privada */
-    this.appointmentsRepository = appointmentsRepository;
-  }
-
   /** Único método da classe, público, e que neste caso cria um appointment */
-  public execute({ provider, date }: Request): Appointment {
+  public async execute({ provider, date }: Request): Promise<Appointment> {
+    /** Define custom repository */
+    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+
     /** Data do agendamento definida como início da hora */
     const appointmentDate = startOfHour(date);
 
@@ -39,7 +34,7 @@ class CreateAppointmentService {
      * Avalia se existe agendamento no mesmo horario enviado no corpo da
      * requisicao e retorna o primeiro appointment encontrado
      */
-    const findAppointmentInSameDate = this.appointmentsRepository.findByDate(
+    const findAppointmentInSameDate = await appointmentsRepository.findByDate(
       appointmentDate,
     );
 
@@ -48,11 +43,14 @@ class CreateAppointmentService {
       throw Error('This appointment is already booked');
     }
 
-    /** Adiciona agendamento à lista de agendamentos */
-    const appointment = this.appointmentsRepository.create({
+    /** Cria instância da classe de appointment */
+    const appointment = appointmentsRepository.create({
       provider,
       date: appointmentDate,
     });
+
+    /** Salva instância no banco de dados */
+    await appointmentsRepository.save(appointment);
 
     return appointment;
   }
