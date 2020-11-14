@@ -1,17 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateAppointments1605015481578
-  implements MigrationInterface {
-  /**
-   * Alterações que serão realizadas no banco de dados quando a migration for
-   * executada.
-   */
+export default class CreateUsers1605367888168 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       /** Cria nova tabela */
       new Table({
         /** Nome da tabela */
-        name: 'appointments',
+        name: 'users',
         /** Colunas da tabela */
         columns: [
           /** Primeira coluna */
@@ -29,17 +24,25 @@ export default class CreateAppointments1605015481578
           },
           /** Outra coluna */
           {
-            name: 'provider',
+            name: 'name',
             type: 'varchar',
-            /** Pode ser nulo? (true | false) */
+            /** Pode ser nulo? (true | false) (o padrão já é false) */
             isNullable: false,
           },
           /** Outra coluna */
           {
-            name: 'date',
+            name: 'email',
             /** Define tipo timestamp com timezone */
-            type: 'timestamp with time zone',
+            type: 'varchar',
+            /** Define que valor deve ser único naquela coluna da tabela */
+            isUnique: true,
             isNullable: false,
+          },
+          /** Outra coluna */
+          {
+            name: 'password',
+            /** Define tipo timestamp com timezone */
+            type: 'varchar',
           },
           /** Outra coluna */
           {
@@ -59,12 +62,8 @@ export default class CreateAppointments1605015481578
     );
   }
 
-  /**
-   * Reverte as alterações realizadas no método up, quando precisarmos voltar
-   * nas migrations (ex.: migrate:undo:all)
-   */
   public async down(queryRunner: QueryRunner): Promise<void> {
     /** Deleta tabela */
-    await queryRunner.dropTable('appointments');
+    await queryRunner.dropTable('users');
   }
 }
