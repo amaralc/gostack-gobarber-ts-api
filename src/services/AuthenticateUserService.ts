@@ -1,6 +1,7 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import authConfig from '../config/auth';
 
 import User from '../models/User';
 
@@ -40,18 +41,21 @@ export default class AuthenticateUserService {
       throw new Error('Incorrect combination of email and password');
     }
 
+    /** Desestrutura secret e expiresIn de dentro de authConfig.jwt */
+    const { secret, expiresIn } = authConfig.jwt;
+
     /**
      * Define token utilizando o sign do jsonwebtoken.
      * ATENCAO: Nao colocar informacoes sensiveis
      */
-    const token = sign({}, 'bbbbbfec5c7a007ecd13caf55c6a4d6e', {
+    const token = sign({}, secret, {
       /** Id do usuario */
       subject: user.id,
       /**
        * Tempo de expiracao
        * Ref: avaliar etrategia de 'refresh token'
        */
-      expiresIn: '1d',
+      expiresIn,
     });
 
     /** Se passou por todas as validacoes retorna resposta */
