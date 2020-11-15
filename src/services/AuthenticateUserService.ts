@@ -3,6 +3,8 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '../config/auth';
 
+import AppError from '../errors/AppError';
+
 import User from '../models/User';
 
 interface Request {
@@ -30,7 +32,8 @@ export default class AuthenticateUserService {
 
     /** Se instancia nao for encontrada, retorna erro */
     if (!user) {
-      throw new Error('Incorrect combination of email and password');
+      /** Retorna erro 401 (nao autorizado) */
+      throw new AppError('Incorrect combination of email and password', 401);
     }
 
     /** Define variavel booleana de comparacao de senha com hash da senha armazenado */
@@ -38,7 +41,8 @@ export default class AuthenticateUserService {
 
     /** Se informacoes nao forem compativeis retorna erro */
     if (!passwordMatched) {
-      throw new Error('Incorrect combination of email and password');
+      /** Retorna erro 401 (nao autorizado) */
+      throw new AppError('Incorrect combination of email and password', 401);
     }
 
     /** Desestrutura secret e expiresIn de dentro de authConfig.jwt */
