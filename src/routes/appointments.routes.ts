@@ -38,31 +38,23 @@ appointmentsRouter.get('/', async (request, response) => {
 
 /** Escuta método post na rota raiz (/) e responde com objeto json */
 appointmentsRouter.post('/', async (request, response) => {
-  try {
-    /** Busca provider_id e date de dentro do corpo da requisicao */
-    const { provider_id, date } = request.body;
+  /** Busca provider_id e date de dentro do corpo da requisicao */
+  const { provider_id, date } = request.body;
 
-    /** Ajusta formato da data */
-    const parsedDate = parseISO(date);
+  /** Ajusta formato da data */
+  const parsedDate = parseISO(date);
 
-    /** Instancia serviço */
-    const createAppointment = new CreateAppointmentService();
+  /** Instancia serviço */
+  const createAppointment = new CreateAppointmentService();
 
-    /** Executa serviço (cria appointment) */
-    const appointment = await createAppointment.execute({
-      date: parsedDate,
-      provider_id,
-    });
+  /** Executa serviço (cria appointment) */
+  const appointment = await createAppointment.execute({
+    date: parsedDate,
+    provider_id,
+  });
 
-    /** Devolve resposta à requisição */
-    return response.json(appointment);
-
-    /** Caso o serviço retorne erro */
-  } catch (error) {
-    /**
-     * Retorna mensagem de erro definida no serviço */
-    return response.status(400).json({ error: error.message });
-  }
+  /** Devolve resposta à requisição */
+  return response.json(appointment);
 });
 
 /** Exporta roteador de agendamentos */

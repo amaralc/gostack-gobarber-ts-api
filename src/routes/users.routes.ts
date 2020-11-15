@@ -56,25 +56,20 @@ usersRouter.patch(
   /** Middleware de upload */
   upload.single('avatar'),
   async (request, response) => {
-    try {
-      /** Instancia servico */
-      const updateUserAvatar = new UpdateUserAvatarService();
+    /** Instancia servico */
+    const updateUserAvatar = new UpdateUserAvatarService();
 
-      /** Executa servico de atualizacao do avatar e retorna usuario */
-      const user = await updateUserAvatar.execute({
-        user_id: request.user.id,
-        avatarFilename: request.file.filename,
-      });
+    /** Executa servico de atualizacao do avatar e retorna usuario */
+    const user = await updateUserAvatar.execute({
+      user_id: request.user.id,
+      avatarFilename: request.file.filename,
+    });
 
-      /** Deleta password do usuario */
-      delete user.password;
+    /** Deleta password do usuario */
+    delete user.password;
 
-      /** Retorna mensagem de teste */
-      return response.json(user);
-    } catch (error) {
-      /** Retorna mensagem de erro definida no serviço */
-      return response.status(400).json({ error: error.message });
-    }
+    /** Retorna mensagem de teste */
+    return response.status(200).json(user);
   },
 );
 
