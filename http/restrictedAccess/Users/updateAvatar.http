@@ -1,0 +1,17 @@
+PATCH {{baseUrl}}/users/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=myboundaryname
+Authorization: jwt {{token}}
+
+--myboundaryname
+Content-Disposition: form-data; name="avatar"; filename="1.png"
+Content-Type: image/png
+
+< ./1.png
+--myboundaryname--
+
+# References:
+# -> Envia requisicao pelo insomnia e checa formato na aba timeline
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+# https://stackoverflow.com/questions/61473990/how-to-post-an-image-with-form-data-in-rest-client-for-vscode
+# https://stackoverflow.com/questions/3508338/what-is-the-boundary-in-multipart-form-data
+
