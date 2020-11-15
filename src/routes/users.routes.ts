@@ -1,20 +1,20 @@
 import { Router } from 'express';
+import multer from 'multer';
+import uploadConfig from '../config/upload';
+
+import User from '../models/User';
 
 /** Importa create user service */
 import CreateUserService from '../services/CreateUserService';
 
+/** Importa middleware de autenticacao */
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+
 /** Cria roteador */
 const usersRouter = Router();
 
-/**
- * Cria interface passando password opcional para evitar erro
- * Ref: https://pt.stackoverflow.com/questions/479147/the-operand-of-a-delete-operator-must-be-optional
- */
-interface UserReturnDTO {
-  name: string;
-  email: string;
-  password?: string;
-}
+/** Cria instancia do multer para fazer upload */
+const upload = multer(uploadConfig);
 
 /** Escuta método post na rota raiz (/) e responde com objeto json */
 usersRouter.post('/', async (request, response) => {
@@ -24,8 +24,11 @@ usersRouter.post('/', async (request, response) => {
     /** Instancia servico de criacao de usuario */
     const createUser = new CreateUserService();
 
-    /** Cria novo usuario com tipo definido pela interface UserReturnDTO */
-    const user: UserReturnDTO = await createUser.execute({
+    /** Cria novo usuario com todas as propriedades configuradas como opcionais
+     * Motivo: Permitir que informacoes sejam deletadas na rota que as usa (ex.: password)
+     * Ref: https://www.typescriptlang.org/docs/handbook/utility-types.html
+     */
+    const user: Partial<User> = await createUser.execute({
       name,
       email,
       password,
@@ -43,6 +46,21 @@ usersRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: error.message });
   }
 });
+
+/** Utiliza metodo patch para alterar apenas uma informacao (no caso, o avatar) */
+usersRouter.patch(
+  '/avatar',
+  /** Middleware de autenticacao */
+  ensureAuthenticated,
+  /** Middleware de upload */
+  upload.single('avatar'),
+  async (request, response) => {
+    /** Visualiza dados do arquivo como teste */
+    console.log(request.file);
+    /** Retorna mensagem de teste */
+    return response.json({ ok: true });
+  },
+);
 
 /** Exporta roteador de agendamentos */
 export default usersRouter;
