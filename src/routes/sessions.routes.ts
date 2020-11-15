@@ -30,7 +30,7 @@ sessionsRouter.post('/', async (request, response) => {
     /** Caso o serviço retorne erro */
   } catch (error) {
     /** Retorna mensagem de erro definida no serviço */
-    return response.status(400).json({ error: error.message });
+    return response.status(error.statusCode).json({ error: error.message });
   }
 });
 
