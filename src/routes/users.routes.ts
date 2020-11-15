@@ -4,8 +4,9 @@ import uploadConfig from '../config/upload';
 
 import User from '../models/User';
 
-/** Importa create user service */
+/** Importa services */
 import CreateUserService from '../services/CreateUserService';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 /** Importa middleware de autenticacao */
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
@@ -55,10 +56,25 @@ usersRouter.patch(
   /** Middleware de upload */
   upload.single('avatar'),
   async (request, response) => {
-    /** Visualiza dados do arquivo como teste */
-    console.log(request.file);
-    /** Retorna mensagem de teste */
-    return response.json({ ok: true });
+    try {
+      /** Instancia servico */
+      const updateUserAvatar = new UpdateUserAvatarService();
+
+      /** Executa servico de atualizacao do avatar e retorna usuario */
+      const user = await updateUserAvatar.execute({
+        user_id: request.user.id,
+        avatarFilename: request.file.filename,
+      });
+
+      /** Deleta password do usuario */
+      delete user.password;
+
+      /** Retorna mensagem de teste */
+      return response.json(user);
+    } catch (error) {
+      /** Retorna mensagem de erro definida no serviço */
+      return response.status(400).json({ error: error.message });
+    }
   },
 );
 
