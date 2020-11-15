@@ -6,11 +6,17 @@ import routes from './routes';
 /** Importa conexão sem passar para nenhuma variável */
 import './database';
 
+/** Importa configuracao de upload */
+import uploadConfig from './config/upload';
+
 /** Define app como o retorno da função express() */
 const app = express();
 
 /** Aplicacao entende formato json */
 app.use(express.json());
+
+/** Serve arquivos estaticos na rota files */
+app.use('/files', express.static(uploadConfig.directory));
 
 /** Inicializa rotas */
 app.use(routes);
