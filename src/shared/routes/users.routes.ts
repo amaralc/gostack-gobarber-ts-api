@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multer from 'multer';
-import uploadConfig from '../config/upload';
+import uploadConfig from '../../config/upload';
 
-import User from '../models/User';
+import User from '../../modules/users/entities/User';
 
 /** Importa services */
 import CreateUserService from '../services/CreateUserService';
