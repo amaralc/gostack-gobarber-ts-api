@@ -9,7 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import User from './User';
+import User from '../../users/entities/User';
 
 /**
  * Utiliza experimental decorators (@) para definir que o model
