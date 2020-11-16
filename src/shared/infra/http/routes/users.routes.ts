@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import multer from 'multer';
-import uploadConfig from '../../config/upload';
+import uploadConfig from '../../../../config/upload';
 
-import User from '../../modules/users/entities/User';
+import User from '../../../../modules/users/infra/typeorm/entities/User';
 
 /** Importa services */
-import CreateUserService from '../../modules/users/services/CreateUserService';
-import UpdateUserAvatarService from '../../modules/users/services/UpdateUserAvatarService';
+import CreateUserService from '../../../../modules/users/services/CreateUserService';
+import UpdateUserAvatarService from '../../../../modules/users/services/UpdateUserAvatarService';
 
 /** Importa middleware de autenticacao */
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
