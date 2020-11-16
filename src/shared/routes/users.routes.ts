@@ -5,8 +5,8 @@ import uploadConfig from '../../config/upload';
 import User from '../../modules/users/entities/User';
 
 /** Importa services */
-import CreateUserService from '../services/CreateUserService';
-import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
+import CreateUserService from '../../modules/users/services/CreateUserService';
+import UpdateUserAvatarService from '../../modules/users/services/UpdateUserAvatarService';
 
 /** Importa middleware de autenticacao */
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
