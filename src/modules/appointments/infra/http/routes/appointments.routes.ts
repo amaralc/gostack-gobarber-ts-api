@@ -14,9 +14,6 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 /** Cria roteador de agendamentos */
 const appointmentsRouter = Router();
 
-/** Instancia repositorio de appointments */
-const appointmentsRepository = new AppointmentsRepository();
-
 /**
  * Aplica middleware para todas as rotas abaixo desta linha
  * Obs: para usar apenas em uma rota especifica, passamos o middleware como parametro
@@ -39,6 +36,9 @@ appointmentsRouter.use(ensureAuthenticated);
 appointmentsRouter.post('/', async (request, response) => {
   /** Busca provider_id e date de dentro do corpo da requisicao */
   const { provider_id, date } = request.body;
+
+  /** Instancia repositorio de appointments */
+  const appointmentsRepository = new AppointmentsRepository();
 
   /** Ajusta formato da data */
   const parsedDate = parseISO(date);
