@@ -3,6 +3,13 @@ import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 
+/**
+ * Importa modulo que habilita requisicoes ao backend vindo de outras origens.
+ * CORS - Cross-origin resource sharing
+ * Essa opcao permite definir quais servidores podem fazer requisicao ao backend
+ */
+import cors from 'cors';
+
 /** Importa configuracao de upload */
 import uploadConfig from '@config/upload';
 
@@ -16,6 +23,9 @@ import '@shared/infra/typeorm';
 
 /** Define app como o retorno da função express() */
 const app = express();
+
+/** Usa cors no na aplicacao */
+app.use(cors());
 
 /** Aplicacao entende formato json */
 app.use(express.json());
