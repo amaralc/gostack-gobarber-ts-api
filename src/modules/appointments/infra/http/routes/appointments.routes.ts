@@ -6,11 +6,11 @@ import { getCustomRepository } from 'typeorm';
  * startOfHour: pega data e coloque minuto, segundo, milisegundos como zero
  */
 import { parseISO } from 'date-fns';
-import AppointmentsRepository from '../../../../modules/appointments/repositories/AppointmentsRepository';
-import CreateAppointmentService from '../../../../modules/appointments/services/CreateAppointmentService';
+import AppointmentsRepository from '@modules/appointments/repositories/AppointmentsRepository';
+import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 
 /** Importa middleware de autenticacao */
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 
 /** Cria roteador de agendamentos */
 const appointmentsRouter = Router();

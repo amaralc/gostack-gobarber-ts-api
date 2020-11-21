@@ -2,16 +2,17 @@ import 'reflect-metadata';
 /** Importa express */
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
+
+/** Importa configuracao de upload */
+import uploadConfig from '@config/upload';
+
+/** Importa classe de erro */
+import AppError from '@shared/errors/AppError';
+
 import routes from './routes';
 
 /** Importa conexão sem passar para nenhuma variável */
-import '../typeorm';
-
-/** Importa configuracao de upload */
-import uploadConfig from '../../../config/upload';
-
-/** Importa classe de erro */
-import AppError from '../../errors/AppError';
+import '@shared/infra/typeorm';
 
 /** Define app como o retorno da função express() */
 const app = express();
