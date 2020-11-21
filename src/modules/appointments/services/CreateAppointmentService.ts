@@ -1,10 +1,9 @@
 import { startOfHour } from 'date-fns';
-import { getCustomRepository } from 'typeorm';
 
 import AppError from '@shared/errors/AppError';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
-import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
+import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 
 /**
  * [x] Recebe informações
@@ -13,7 +12,7 @@ import AppointmentsRepository from '@modules/appointments/infra/typeorm/reposito
  */
 
 /** Cria interface para recebimento de dados */
-interface Request {
+interface IRequest {
   provider_id: string;
   date: Date;
 }
@@ -24,11 +23,15 @@ interface Request {
 
 /** Classe para criação de appointment */
 class CreateAppointmentService {
-  /** Único método da classe, público, e que neste caso cria um appointment */
-  public async execute({ provider_id, date }: Request): Promise<Appointment> {
-    /** Define custom repository */
-    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+  /**
+   * Define variavel private com tipo definido.
+   * Essa sintaxe é uma alternativa para não precisar declarar uma variável private e
+   * depois inicializá-la com this.variavel no constructor
+   */
+  constructor(private appointmentsRepository: IAppointmentsRepository) {}
 
+  /** Único método da classe, público, e que neste caso cria um appointment */
+  public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
     /** Data do agendamento definida como início da hora */
     const appointmentDate = startOfHour(date);
 
@@ -36,7 +39,7 @@ class CreateAppointmentService {
      * Avalia se existe agendamento no mesmo horario enviado no corpo da
      * requisicao e retorna o primeiro appointment encontrado
      */
-    const findAppointmentInSameDate = await appointmentsRepository.findByDate(
+    const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
       appointmentDate,
     );
 
@@ -47,7 +50,7 @@ class CreateAppointmentService {
     }
 
     /** Cria instância da classe de appointment */
-    const appointment = await appointmentsRepository.create({
+    const appointment = await this.appointmentsRepository.create({
       provider_id,
       date: appointmentDate,
     });
