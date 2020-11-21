@@ -1,28 +1,27 @@
-import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
 import AppError from '@shared/errors/AppError';
 import uploadConfig from '@config/upload';
 
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import User from '@modules/users/infra/typeorm/entities/User';
 
-interface Request {
+interface IRequest {
   user_id: string;
   avatarFilename: string;
 }
 
 export default class UpdateUserAvatarService {
+  constructor(private usersRepository: IUsersRepository) {}
+
   public async execute({
     user_id,
     avatarFilename,
   }: /** Define retorno como usuario com atributos opcionais (possibilita deletar senha) */
-  Request): Promise<Partial<User>> {
-    /** Define repositorio do model */
-    const usersRepository = getRepository(User);
-
+  IRequest): Promise<Partial<User>> {
     /** Busca instancia no banco e retorna instancia ou undefined */
-    const user = await usersRepository.findOne(user_id);
+    const user = await this.usersRepository.findById(user_id);
 
     /** Se nao encontrou, retorna erro */
     if (!user) {
@@ -51,7 +50,7 @@ export default class UpdateUserAvatarService {
     user.avatar = avatarFilename;
 
     /** Salva alteracoes no banco de dados */
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     /** Retorna usuario */
     return user;
