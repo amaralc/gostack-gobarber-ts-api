@@ -1,12 +1,12 @@
-import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import AppError from '@shared/errors/AppError';
 import authConfig from '@config/auth';
 
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import User from '@modules/users/infra/typeorm/entities/User';
 
-interface Request {
+interface IRequest {
   email: string;
   password: string;
 }
@@ -16,18 +16,17 @@ interface Request {
  * Motivo: Permitir que informacoes sejam deletadas na rota que as usa (ex.: password)
  * Ref: https://www.typescriptlang.org/docs/handbook/utility-types.html
  */
-interface Response {
+interface IResponse {
   user: Partial<User>;
   token: string;
 }
 
 export default class AuthenticateUserService {
-  public async execute({ email, password }: Request): Promise<Response> {
-    /** Define repositorio com acoes padrao usando metodos do typeorm */
-    const usersRepository = getRepository(User);
+  constructor(private usersRepository: IUsersRepository) {}
 
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
     /** Busca instancia no banco de dados passando email */
-    const user = await usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findByEmail(email);
 
     /** Se instancia nao for encontrada, retorna erro */
     if (!user) {
