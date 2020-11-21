@@ -4,7 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import AppError from '@shared/errors/AppError';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
-import AppointmentsRepository from '@modules/appointments/repositories/AppointmentsRepository';
+import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
 
 /**
  * [x] Recebe informações
@@ -47,13 +47,10 @@ class CreateAppointmentService {
     }
 
     /** Cria instância da classe de appointment */
-    const appointment = appointmentsRepository.create({
+    const appointment = await appointmentsRepository.create({
       provider_id,
       date: appointmentDate,
     });
-
-    /** Salva instância no banco de dados */
-    await appointmentsRepository.save(appointment);
 
     return appointment;
   }
