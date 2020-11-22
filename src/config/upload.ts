@@ -8,7 +8,9 @@ const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 /** Exporta configuracoes do multer */
 export default {
   /** Adiciona atributo com caminho do diretorio para ser exportado */
-  directory: tmpFolder,
+  tmpFolder,
+  /** Adiciona caminho adicionando uploads ao final */
+  uploadsFolder: path.resolve(tmpFolder, 'uploads'),
   /** Define tipo de storage */
   storage: multer.diskStorage({
     /** Define destino dos arquivos */
