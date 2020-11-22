@@ -1,12 +1,10 @@
 import { Router } from 'express';
 import multer from 'multer';
+import { container } from 'tsyringe';
 import uploadConfig from '@config/upload';
 
 /** Importa entitie de usuario */
 import User from '@modules/users/infra/typeorm/entities/User';
-
-/** Importa users repository */
-import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
 /** Importa services */
 import CreateUserService from '@modules/users/services/CreateUserService';
@@ -26,11 +24,8 @@ usersRouter.post('/', async (request, response) => {
   try {
     const { name, email, password } = request.body;
 
-    /** Instancia user repository */
-    const usersRepository = new UsersRepository();
-
     /** Instancia servico de criacao de usuario */
-    const createUser = new CreateUserService(usersRepository);
+    const createUser = container.resolve(CreateUserService);
 
     /** Cria novo usuario com todas as propriedades configuradas como opcionais
      * Motivo: Permitir que informacoes sejam deletadas na rota que as usa (ex.: password)
@@ -63,11 +58,8 @@ usersRouter.patch(
   /** Middleware de upload */
   upload.single('avatar'),
   async (request, response) => {
-    /** Instancia user repository */
-    const usersRepository = new UsersRepository();
-
     /** Instancia servico */
-    const updateUserAvatar = new UpdateUserAvatarService(usersRepository);
+    const updateUserAvatar = container.resolve(UpdateUserAvatarService);
 
     /** Executa servico de atualizacao do avatar e retorna usuario */
     const user = await updateUserAvatar.execute({

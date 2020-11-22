@@ -3,7 +3,7 @@
  * com funcionalidades basicas, create, update, delete, etc.
  */
 import { hash } from 'bcryptjs';
-
+import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
@@ -15,8 +15,12 @@ interface IRequest {
   password: string;
 }
 
+@injectable()
 class CreateUserService {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) {}
 
   async execute({ name, email, password }: IRequest): Promise<User> {
     /** Busca usuario com email igual ao informado */
