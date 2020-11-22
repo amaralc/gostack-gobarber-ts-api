@@ -1,5 +1,7 @@
 import { startOfHour } from 'date-fns';
 
+import { injectable, inject } from 'tsyringe';
+
 import AppError from '@shared/errors/AppError';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
@@ -21,14 +23,19 @@ interface IRequest {
  * Dependency Inversion
  */
 
-/** Classe para criação de appointment */
+/** Classe para criação de appointment e identifica que é injetável (receberá injeção de dependência) */
+@injectable()
 class CreateAppointmentService {
   /**
    * Define variavel private com tipo definido.
    * Essa sintaxe é uma alternativa para não precisar declarar uma variável private e
    * depois inicializá-la com this.variavel no constructor
    */
-  constructor(private appointmentsRepository: IAppointmentsRepository) {}
+  constructor(
+    /** Injeta dependencia */
+    @inject('AppointmentsRepository')
+    private appointmentsRepository: IAppointmentsRepository,
+  ) {}
 
   /** Único método da classe, público, e que neste caso cria um appointment */
   public async execute({ provider_id, date }: IRequest): Promise<Appointment> {

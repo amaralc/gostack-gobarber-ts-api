@@ -5,7 +5,7 @@ import { Router } from 'express';
  * startOfHour: pega data e coloque minuto, segundo, milisegundos como zero
  */
 import { parseISO } from 'date-fns';
-import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
+import { container } from 'tsyringe';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 
 /** Importa middleware de autenticacao */
@@ -37,16 +37,11 @@ appointmentsRouter.post('/', async (request, response) => {
   /** Busca provider_id e date de dentro do corpo da requisicao */
   const { provider_id, date } = request.body;
 
-  /** Instancia repositorio de appointments */
-  const appointmentsRepository = new AppointmentsRepository();
-
   /** Ajusta formato da data */
   const parsedDate = parseISO(date);
 
-  /** Instancia serviço */
-  const createAppointment = new CreateAppointmentService(
-    appointmentsRepository,
-  );
+  /** Instancia serviço utilizando container de injecao de dependencias */
+  const createAppointment = container.resolve(CreateAppointmentService);
 
   /** Executa serviço (cria appointment) */
   const appointment = await createAppointment.execute({
