@@ -1,11 +1,7 @@
-/**
- * Se nao precisamos de custom repository, usamos apenas o get repository
- * com funcionalidades basicas, create, update, delete, etc.
- */
-import { hash } from 'bcryptjs';
 import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 
@@ -20,6 +16,9 @@ class CreateUserService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   async execute({ name, email, password }: IRequest): Promise<User> {
@@ -32,11 +31,8 @@ class CreateUserService {
       throw new AppError('Email address already used');
     }
 
-    /**
-     * Define hash da senha, passando hash e tamanho do 'salt' que sera utilizado
-     * Ref: https://en.wikipedia.org/wiki/Salt_(cryptography)
-     */
-    const hashedPassword = await hash(password, 8);
+    /** Define hash da senha */
+    const hashedPassword = await this.hashProvider.generateHash(password);
 
     /** Cria instancia de usuario */
     const user = await this.usersRepository.create({
