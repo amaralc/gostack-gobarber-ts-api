@@ -1,32 +1,16 @@
 import { Router } from 'express';
-import { container } from 'tsyringe';
 
-/** Importa service */
-import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
+/** Importa controller */
+import SessionsController from '../controllers/SessionsController';
 
 /** Cria roteador */
 const sessionsRouter = Router();
 
+/** Instancia controller */
+const sessionsController = new SessionsController();
+
 /** Escuta método post na rota raiz (/) e responde com objeto json */
-sessionsRouter.post('/', async (request, response) => {
-  /** Salva dados da requisicao */
-  const { email, password } = request.body;
-
-  /** Instancia servico */
-  const authenticateUser = container.resolve(AuthenticateUserService);
-
-  /** Autentica usuario e retorna dados relevantes */
-  const { user, token } = await authenticateUser.execute({
-    email,
-    password,
-  });
-
-  /** Deleta dados sensiveis */
-  delete user.password;
-
-  /** Retorna usuario criado */
-  return response.status(200).json({ user, token });
-});
+sessionsRouter.post('/', sessionsController.create);
 
 /** Exporta roteador de agendamentos */
 export default sessionsRouter;
