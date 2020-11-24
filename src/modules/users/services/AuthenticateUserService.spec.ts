@@ -24,7 +24,9 @@ describe('AuthenticateUser', () => {
     });
 
     /** Avalia resultado */
-    expect(authenticateWithNonExistingUser).rejects.toBeInstanceOf(AppError);
+    await expect(authenticateWithNonExistingUser).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 
   it('should be able to authenticate the user', async () => {
@@ -89,6 +91,8 @@ describe('AuthenticateUser', () => {
     });
 
     /** Avalia resultado */
-    expect(authenticateWithWrongPassword).rejects.toBeInstanceOf(AppError);
+    await expect(authenticateWithWrongPassword).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 });
