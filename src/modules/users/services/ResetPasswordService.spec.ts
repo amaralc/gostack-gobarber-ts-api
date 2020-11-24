@@ -1,4 +1,4 @@
-// import AppError from '@shared/errors/AppError';
+import AppError from '@shared/errors/AppError';
 
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 import FakeUserTokensRepository from '@modules/users/repositories/fakes/FakeUserTokensRepository';
@@ -49,8 +49,35 @@ describe('SendForgotPasswordEmail', () => {
     const updatedUser = await fakeUsersRepository.findById(user.id);
 
     /** Avalia resultado */
-
     expect(generateHash).toHaveBeenCalledWith('123123');
+    expect(updatedUser?.password).toBe('123123');
+  });
+
+  it('should not be able to reset the password with a non-existing token', async () => {
+    /** Cria usuário fake */
+    const user = await fakeUsersRepository.create({
+      name: 'User One',
+      email: 'user1@email.com',
+      password: '123456',
+    });
+
+    /** Monitora funcao */
+    const generateHash = jest.spyOn(fakeHashProvider, 'generateHash');
+
+    /** Cria token fake */
+    const { token } = await fakeUserTokensRepository.generate(user.id);
+
+    /** Executa serviço */
+    const resetPasswordWithNonExistingToken = await resetPassword.execute({
+      password: '123123',
+      token: 'non-existing-token',
+    });
+
+    /** Busca dados completos do usuário */
+    const updatedUser = await fakeUsersRepository.findById(user.id);
+
+    /** Avalia resultado */
+    expect(resetPasswordWithNonExistingToken).rejects.toBeInstanceOf(AppError);
     expect(updatedUser?.password).toBe('123123');
   });
 });
