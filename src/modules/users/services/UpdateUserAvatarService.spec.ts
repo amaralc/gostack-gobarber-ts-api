@@ -50,7 +50,7 @@ describe('UpdateUserAvatar', () => {
     });
 
     /** Avalia resultado */
-    expect(updateNonExistingUser).rejects.toBeInstanceOf(AppError);
+    await expect(updateNonExistingUser).rejects.toBeInstanceOf(AppError);
   });
 
   it('should delete old avatar when updating avatar of existing user', async () => {

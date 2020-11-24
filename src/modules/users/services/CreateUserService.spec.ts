@@ -54,6 +54,6 @@ describe('CreateUser', () => {
     });
 
     /** Avalia resultado */
-    expect(userWithRepeatedEmail).rejects.toBeInstanceOf(AppError);
+    await expect(userWithRepeatedEmail).rejects.toBeInstanceOf(AppError);
   });
 });

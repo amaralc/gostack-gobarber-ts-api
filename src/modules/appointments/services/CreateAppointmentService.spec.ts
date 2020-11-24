@@ -49,6 +49,6 @@ describe('CreateAppointment', () => {
     });
 
     /** Avalia resultado */
-    expect(appointmentOnSameTime).rejects.toBeInstanceOf(AppError);
+    await expect(appointmentOnSameTime).rejects.toBeInstanceOf(AppError);
   });
 });

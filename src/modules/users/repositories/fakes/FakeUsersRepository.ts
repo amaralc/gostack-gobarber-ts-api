@@ -6,7 +6,7 @@ import User from '@modules/users/infra/typeorm/entities/User';
 import ICreateAppointmentDTO from '@modules/users/dtos/ICreateUserDTO';
 
 /** Cria classe implementando interface que permite troca de dependencias */
-class UsersRepository implements IUsersRepository {
+class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
   public async findById(id: string): Promise<User | undefined> {
@@ -33,4 +33,4 @@ class UsersRepository implements IUsersRepository {
   }
 }
 
-export default UsersRepository;
+export default FakeUsersRepository;
