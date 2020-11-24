@@ -4,11 +4,11 @@ Documentação: [clique aqui](https://www.notion.so/2208cd9c974042b6ae5728186643
 
 # Funcionalidades macro
 
-<details><summary>Recuperação de senha</summary>
+## Recuperação de senha
 
   **Requisitos Funcionais (RF)**
 
-    - O usuário deve poder recuperar sua senha;
+    - O usuário deve poder recuperar sua senha informando seu email
     - O usuário deve receber um e-mail com instruções de recuperação de senha;
     - O usuário deve poder resetar sua senha;
 
@@ -23,9 +23,9 @@ Documentação: [clique aqui](https://www.notion.so/2208cd9c974042b6ae5728186643
     - O link enviado para o email para resetar a senha, deve expirar em 2 horas;
     - O usuário precisa confirmar sua senha ao resetar sua senha;
 
-</details>
 
-<details><summary>Atualização de perfil</summary>
+
+## Atualização de perfil
 
   **Requisitos Funcionais (RF)**
 
@@ -37,11 +37,7 @@ Documentação: [clique aqui](https://www.notion.so/2208cd9c974042b6ae5728186643
     - Para atualizar sua senha, o usuário deve informar a senha antiga;
     - Para atualizar sua senha, o usuário precisa confirmar a nova senha;
 
-</details>
-
-<details><summary>Painel do prestador</summary>
-
-  -
+## Painel do prestador
 
   **Requisitos Funcionais (RF)**
 
@@ -59,10 +55,9 @@ Documentação: [clique aqui](https://www.notion.so/2208cd9c974042b6ae5728186643
 
     - A notificação deve ter um status de lida ou não lida para controle do prestador;
 
-</details>
 
-<details>
-  <summary>Agendamento de serviços</summary>
+
+## Agendamento de serviços
 
   **Requisitos Funcionais (RF)**
 
@@ -83,4 +78,3 @@ Documentação: [clique aqui](https://www.notion.so/2208cd9c974042b6ae5728186643
     - Usuário não pode agendar em um horário que já passou;
     - Usuário não pode agendar serviços consigo mesmo;
 
-</details>
