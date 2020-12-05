@@ -4,7 +4,7 @@ import { getRepository, Repository } from 'typeorm';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 import User from '@modules/users/infra/typeorm/entities/User';
-import ICreateAppointmentDTO from '@modules/users/dtos/ICreateUserDTO';
+import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 
 /** Cria classe implementando interface que permite troca de dependencias */
 class UsersRepository implements IUsersRepository {
@@ -27,7 +27,7 @@ class UsersRepository implements IUsersRepository {
   }
 
   /** Método para criar appointment */
-  public async create(userData: ICreateAppointmentDTO): Promise<User> {
+  public async create(userData: ICreateUserDTO): Promise<User> {
     /** Cria novo instância */
     const user = this.ormRepository.create(userData);
 
