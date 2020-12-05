@@ -54,6 +54,37 @@ describe('SendForgotPasswordEmail', () => {
   });
 
   it('should not be able to reset the password with a non-existing token', async () => {
+    /** Executa serviço */
+    const resetPasswordWithNonExistingToken = resetPassword.execute({
+      password: '123123',
+      token: 'non-existing-token',
+    });
+
+    /** Avalia resultado */
+    await expect(resetPasswordWithNonExistingToken).rejects.toBeInstanceOf(
+      AppError,
+    );
+  });
+
+  it('should not be able to reset the password with a non-existing user', async () => {
+    /** Busca token fake */
+    const { token } = await fakeUserTokensRepository.generate(
+      'non-existing-user-id',
+    );
+
+    /** Executa serviço */
+    const resetPasswordWithNonExistingToken = resetPassword.execute({
+      password: '123123',
+      token,
+    });
+
+    /** Avalia resultado */
+    await expect(resetPasswordWithNonExistingToken).rejects.toBeInstanceOf(
+      AppError,
+    );
+  });
+
+  it('should not be able to reset the password more than two hours after token generation', async () => {
     /** Cria usuário fake */
     const user = await fakeUsersRepository.create({
       name: 'User One',
@@ -61,23 +92,25 @@ describe('SendForgotPasswordEmail', () => {
       password: '123456',
     });
 
-    /** Monitora funcao */
-    const generateHash = jest.spyOn(fakeHashProvider, 'generateHash');
-
     /** Cria token fake */
     const { token } = await fakeUserTokensRepository.generate(user.id);
 
-    /** Executa serviço */
-    const resetPasswordWithNonExistingToken = await resetPassword.execute({
-      password: '123123',
-      token: 'non-existing-token',
+    /** Espiona função Date.now e executa minha funcao no lugar dela */
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      const customDate = new Date();
+
+      return customDate.setHours(customDate.getHours() + 3);
     });
 
-    /** Busca dados completos do usuário */
-    const updatedUser = await fakeUsersRepository.findById(user.id);
+    /** Executa serviço */
+    const resetMoreThanTwoHoursAfterGeneration = resetPassword.execute({
+      password: '123123',
+      token,
+    });
 
     /** Avalia resultado */
-    expect(resetPasswordWithNonExistingToken).rejects.toBeInstanceOf(AppError);
-    expect(updatedUser?.password).toBe('123123');
+    await expect(resetMoreThanTwoHoursAfterGeneration).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 });
