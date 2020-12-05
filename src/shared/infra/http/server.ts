@@ -34,7 +34,7 @@ app.use(cors());
 app.use(express.json());
 
 /** Serve arquivos estaticos na rota files */
-app.use('/files', express.static(uploadConfig.directory));
+app.use('/files', express.static(uploadConfig.uploadsFolder));
 
 /** Inicializa rotas */
 app.use(routes);
