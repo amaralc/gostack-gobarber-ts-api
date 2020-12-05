@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe';
+import { isAfter, addHours } from 'date-fns';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
@@ -38,6 +39,17 @@ class SendForgotPasswordEmailService {
     /** Verifica se user existe e se nao, retorna erro */
     if (!user) {
       throw new AppError('User does not exist');
+    }
+
+    /** Get timestamp of token creation */
+    const tokenCreatedAt = userToken.created_at;
+
+    /** Cria timestamp de duas horas após a criação do token */
+    const compareDate = addHours(tokenCreatedAt, 2);
+
+    /** Se timestamp atual é maior que timestamp de criação do token, retorna erro */
+    if (isAfter(Date.now(), compareDate)) {
+      throw new AppError('Token expired');
     }
 
     /** Muda password do usuario */
