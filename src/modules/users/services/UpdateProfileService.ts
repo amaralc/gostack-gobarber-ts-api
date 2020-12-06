@@ -31,7 +31,7 @@ export default class UpdateProfileService {
     password,
     old_password,
   }: /** Define retorno como usuario com atributos opcionais (possibilita deletar senha) */
-  IRequest): Promise<User> {
+  IRequest): Promise<Partial<User>> {
     /** Busca instancia no repositorio */
     const user = await this.usersRepository.findById(user_id);
 
@@ -79,7 +79,13 @@ export default class UpdateProfileService {
     /** Salva dados do usuario */
     const updatedUser = await this.usersRepository.save(user);
 
+    /** User without password */
+    const updatedSecuredUser: Partial<User> = updatedUser;
+
+    /** Deleta password antes de retornar requisicao */
+    delete updatedSecuredUser.password;
+
     /** Retorna usuario */
-    return updatedUser;
+    return updatedSecuredUser;
   }
 }
