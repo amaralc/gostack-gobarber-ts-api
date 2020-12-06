@@ -5,45 +5,26 @@ import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHa
 import AuthenticateUserService from './AuthenticateUserService';
 import CreateUserService from './CreateUserService';
 
-describe('AuthenticateUser', () => {
-  it('should not be able to authenticate with non existing user', async () => {
-    /** Instancia fakes */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUser: CreateUserService;
+let authenticateUser: AuthenticateUserService;
 
-    /** Instancia servico passando fakes como dependencia */
-    const authenticateUser = new AuthenticateUserService(
+describe('AuthenticateUser', () => {
+  beforeEach(() => {
+    /** Instancia fakes */
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+
+    /** Instancia servicos passando fakes como dependencias */
+    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+    authenticateUser = new AuthenticateUserService(
       fakeUsersRepository,
       fakeHashProvider,
-    );
-
-    /** Executa serviço */
-    const authenticateWithNonExistingUser = authenticateUser.execute({
-      email: 'user1@email.com',
-      password: '123456',
-    });
-
-    /** Avalia resultado */
-    await expect(authenticateWithNonExistingUser).rejects.toBeInstanceOf(
-      AppError,
     );
   });
 
   it('should be able to authenticate the user', async () => {
-    /** Instancia fakes */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    /** Instancia servicos passando fakes como dependencias */
-    const createUser = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-    const authenticateUser = new AuthenticateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
     /** Cria usuario */
     const user = await createUser.execute({
       name: 'User One',
@@ -62,21 +43,20 @@ describe('AuthenticateUser', () => {
     expect(response.user).toEqual(user);
   });
 
+  it('should not be able to authenticate with non existing user', async () => {
+    /** Executa serviço */
+    const authenticateWithNonExistingUser = authenticateUser.execute({
+      email: 'user1@email.com',
+      password: '123456',
+    });
+
+    /** Avalia resultado */
+    await expect(authenticateWithNonExistingUser).rejects.toBeInstanceOf(
+      AppError,
+    );
+  });
+
   it('should not be able to authenticate user with wrong password', async () => {
-    /** Instancia fakes */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    /** Instancia servicos passando fakes como dependencias */
-    const createUser = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-    const authenticateUser = new AuthenticateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
     /** Cria usuario */
     await createUser.execute({
       name: 'User One',

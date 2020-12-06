@@ -3,16 +3,23 @@ import AppError from '@shared/errors/AppError';
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository';
 import CreateAppointmentService from './CreateAppointmentService';
 
+/** Define variaveis que serao utilizadas nos testes */
+let fakeAppointmentsRepository: FakeAppointmentsRepository;
+let createAppointment: CreateAppointmentService;
+
 describe('CreateAppointment', () => {
-  it('should be able to create a new appointment', async () => {
+  /** Inicializa variaveis que serao utilizadas em todos os testes */
+  beforeEach(() => {
     /** Instancia repositorio */
-    const fakeAppointmentsRepository = new FakeAppointmentsRepository();
+    fakeAppointmentsRepository = new FakeAppointmentsRepository();
 
     /** Instancia servico passando repositorio como dependencia */
-    const createAppointment = new CreateAppointmentService(
+    createAppointment = new CreateAppointmentService(
       fakeAppointmentsRepository,
     );
+  });
 
+  it('should be able to create a new appointment', async () => {
     /** Executa serviço */
     const appointment = await createAppointment.execute({
       date: new Date(),
@@ -25,14 +32,6 @@ describe('CreateAppointment', () => {
   });
 
   it('should not be able to create two appointments on the same time', async () => {
-    /** Instancia repositorio */
-    const fakeAppointmentsRepository = new FakeAppointmentsRepository();
-
-    /** Instancia servico passando repositorio como dependencia */
-    const createAppointment = new CreateAppointmentService(
-      fakeAppointmentsRepository,
-    );
-
     /** Define parametro */
     const appointmentDate = new Date();
 

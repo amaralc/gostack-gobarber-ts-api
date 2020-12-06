@@ -4,18 +4,24 @@ import FakeStorageProvider from '@shared/container/providers/StorageProviders/fa
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 import UpdateUserAvatarService from './UpdateUserAvatarService';
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeStorageProvider: FakeStorageProvider;
+let updateUserAvatar: UpdateUserAvatarService;
+
 describe('UpdateUserAvatar', () => {
-  it('should be able to create a new user', async () => {
+  beforeEach(() => {
     /** Instancia fakes */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeStorageProvider = new FakeStorageProvider();
 
     /** Instancia servico passando repositorio como dependencia */
-    const updateUserAvatar = new UpdateUserAvatarService(
+    updateUserAvatar = new UpdateUserAvatarService(
       fakeUsersRepository,
       fakeStorageProvider,
     );
+  });
 
+  it('should be able to create a new user', async () => {
     const user = await fakeUsersRepository.create({
       name: 'User One',
       email: 'user1@email.com',
@@ -33,16 +39,6 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('should not be able to update avatar of non existing user', async () => {
-    /** Instancia fakes */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
-    /** Instancia servico passando repositorio como dependencia */
-    const updateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
-
     /** Executa serviço */
     const updateNonExistingUser = updateUserAvatar.execute({
       user_id: 'non-existing-user',
@@ -54,18 +50,8 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('should delete old avatar when updating avatar of existing user', async () => {
-    /** Instancia fakes */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
     /** Monitora função para mais adiante avaliar se foi disparada */
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
-
-    /** Instancia servico passando repositorio como dependencia */
-    const updateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
 
     const user = await fakeUsersRepository.create({
       name: 'User One',
