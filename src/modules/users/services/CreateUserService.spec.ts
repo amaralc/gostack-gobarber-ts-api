@@ -4,18 +4,21 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserService from './CreateUserService';
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUser: CreateUserService;
+
 describe('CreateUser', () => {
-  it('should be able to create a new user', async () => {
+  beforeEach(() => {
     /** Instancia repositorio */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
 
     /** Instancia servico passando repositorio como dependencia */
-    const createUser = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
+    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+  });
 
+  it('should be able to create a new user', async () => {
     /** Executa serviço */
     const user = await createUser.execute({
       name: 'User One',
@@ -29,16 +32,6 @@ describe('CreateUser', () => {
   });
 
   it('should not be able to create a new user with same email of another user', async () => {
-    /** Instancia repositorio */
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    /** Instancia servico passando repositorio como dependencia */
-    const createUser = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
     /** Executa serviço */
     await createUser.execute({
       name: 'User One',
