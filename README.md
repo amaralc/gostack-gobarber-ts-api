@@ -14,7 +14,7 @@ Documentação: [clique aqui](https://www.notion.so/2208cd9c974042b6ae5728186643
 
   **Requisitos não Funcionais (RNF)**
 
-    - Utilizar mailtrap para testar envios em ambiente de desenvolvimento;
+    - Utilizar mailtrap ou ethereal para testar envios em ambiente de desenvolvimento;
     - Utilizar Amazon SES para envios em produção (12 meses gratuito, 100mil emails por mês... etc);
     - Envio de emails deve acontecer em segundo plano (background job);
 
