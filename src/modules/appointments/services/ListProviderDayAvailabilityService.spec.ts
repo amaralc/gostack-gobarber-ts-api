@@ -16,32 +16,48 @@ describe('ListProviderDayAvailability', () => {
   });
 
   it('should be able to list the day availability of a provider', async () => {
+    /** Define variaveis locais para reutilizacao no teste */
+    const providerId = 'provider-id';
+    const YYYY = 2020;
+    const MM = 4;
+    const DD = 20;
+    const HH = 11;
+
     /** Cria agendamentos */
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 8, 0, 0),
+      provider_id: providerId,
+      date: new Date(YYYY, MM, DD, HH + 3, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 10, 0, 0),
+      provider_id: providerId,
+      date: new Date(YYYY, MM, DD, HH + 4, 0, 0),
+    });
+
+    /** Espiona função Date.now e executa minha funcao no lugar dela */
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(YYYY, MM, DD, HH).getTime();
     });
 
     /** Lista disponibilidade */
     const availability = await listProviderDayAvailabilityService.execute({
-      provider_id: 'provider-id',
-      year: 2020,
-      month: 5,
-      day: 20,
+      provider_id: providerId,
+      year: YYYY,
+      /** JavaScript comeca em 0 mas nosso service comeca em 1 */
+      month: MM + 1,
+      day: DD,
     });
 
     /** Avalia resultados */
     expect(availability).toEqual(
       expect.arrayContaining([
-        { hour: 8, available: false },
-        { hour: 9, available: true },
-        { hour: 10, available: false },
-        { hour: 11, available: true },
+        { hour: HH - 3, available: false },
+        { hour: HH - 2, available: false },
+        { hour: HH - 1, available: false },
+        { hour: HH + 2, available: true },
+        { hour: HH + 3, available: false },
+        { hour: HH + 4, available: false },
+        { hour: HH + 5, available: true },
       ]),
     );
   });

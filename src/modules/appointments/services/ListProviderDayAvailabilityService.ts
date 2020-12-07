@@ -1,6 +1,5 @@
-import { getHours } from 'date-fns';
+import { getHours, isAfter } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
-// import { getDate, getDaysInMonth } from 'date-fns';
 
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
@@ -50,15 +49,21 @@ export default class ListProviderDayAvailabilityService {
       (_, index) => index + hourStart,
     );
 
+    /** Cria data atual disponibilizando para mock (vide ResetPasswordService -> mockImplementationOnce */
+    const currentDate = new Date(Date.now());
+
     /** Define array de disponibilidade */
     const availability = eachHourArray.map(hour => {
       const hasAppointmentInHour = appointments.find(
         appointment => getHours(appointment.date) === hour,
       );
 
+      /** Cria data para comparacao, considerando hora desta iteracao (map) */
+      const compareDate = new Date(year, month - 1, day, hour);
+
       return {
         hour,
-        available: !hasAppointmentInHour,
+        available: !hasAppointmentInHour && isAfter(compareDate, currentDate),
       };
     });
 
