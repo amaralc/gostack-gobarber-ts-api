@@ -27,8 +27,8 @@ describe('CreateUser', () => {
     });
 
     /** Avalia resultado */
-    expect(user).toHaveProperty('id');
-    expect(user.email).toBe('user1@email.com');
+    await expect(user).toHaveProperty('id');
+    await expect(user.email).toBe('user1@email.com');
   });
 
   it('should not be able to create a new user with same email of another user', async () => {

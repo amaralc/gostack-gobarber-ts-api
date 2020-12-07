@@ -39,6 +39,6 @@ describe('ListProviders', () => {
     });
 
     /** Avalia resultado */
-    expect(providers).toEqual([user1, user2]);
+    await expect(providers).toEqual([user1, user2]);
   });
 });

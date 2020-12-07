@@ -36,8 +36,8 @@ describe('UpdateProfile', () => {
     });
 
     /** Avalia resultado */
-    expect(updatedUser.name).toBe('User Zero One');
-    expect(updatedUser.email).toBe('user01@email.com');
+    await expect(updatedUser.name).toBe('User Zero One');
+    await expect(updatedUser.email).toBe('user01@email.com');
   });
 
   it('should not be able to change email currently used by another user', async () => {
@@ -83,8 +83,8 @@ describe('UpdateProfile', () => {
     });
 
     /** Avalia resultado */
-    expect(updatedUser.name).toBe('User Zero One');
-    expect(updatedUser.email).toBe('user01@email.com');
+    await expect(updatedUser.name).toBe('User Zero One');
+    await expect(updatedUser.email).toBe('user01@email.com');
   });
 
   it('should not be able to update the password if old password has not been informed', async () => {
