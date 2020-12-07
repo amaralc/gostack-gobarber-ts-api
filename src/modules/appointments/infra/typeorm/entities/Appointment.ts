@@ -34,6 +34,15 @@ class Appointment {
   @JoinColumn({ name: 'provider_id' })
   provider: User;
 
+  /** Define user como coluna (nao gerada) do tipo string (padrão) */
+  @Column()
+  user_id: string;
+
+  /** Relacionamento tipo 'muitos' deste model para 'um' do model referenciado */
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
   /** Define date como tipo 'timestamp with time zone' */
   @Column('timestamp with time zone')
   date: Date;
