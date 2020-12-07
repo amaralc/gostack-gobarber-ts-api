@@ -106,7 +106,7 @@ describe('ListProviderMonthAvailability', () => {
 
     /** Avalia resultados */
     await expect(availability).toEqual(
-      expect.arrayContaining([
+      await expect.arrayContaining([
         { day: DD - 1, available: true },
         { day: DD + 0, available: false },
         { day: DD + 1, available: true },
