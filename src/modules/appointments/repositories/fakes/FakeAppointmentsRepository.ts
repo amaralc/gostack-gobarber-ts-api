@@ -32,7 +32,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
     const appointment = new Appointment();
 
     /** Define conteúdo do objeto instanciado */
-    Object.assign(appointment, { id: v4(), date, provider_id });
+    Object.assign(appointment, { id: v4(), date, provider_id, user_id });
 
     /** Adiciona o objeto à lista */
     this.appointments.push(appointment);
