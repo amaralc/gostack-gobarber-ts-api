@@ -19,12 +19,12 @@ describe('ListProviderDayAvailability', () => {
     /** Cria agendamentos */
     await fakeAppointmentsRepository.create({
       provider_id: 'provider-id',
-      date: new Date(2020, 3, 20, 8, 0, 0),
+      date: new Date(2020, 4, 20, 8, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
       provider_id: 'provider-id',
-      date: new Date(2020, 3, 20, 10, 0, 0),
+      date: new Date(2020, 4, 20, 10, 0, 0),
     });
 
     /** Lista disponibilidade */
