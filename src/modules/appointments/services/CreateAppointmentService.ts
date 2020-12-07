@@ -1,4 +1,4 @@
-import { startOfHour } from 'date-fns';
+import { startOfHour, isBefore, getHours } from 'date-fns';
 
 import { injectable, inject } from 'tsyringe';
 
@@ -47,6 +47,18 @@ class CreateAppointmentService {
     /** Data do agendamento definida como início da hora */
     const appointmentDate = startOfHour(date);
 
+    /** Avalia se user_id e provider_id sao iguais, e se forem retorna erro */
+    if (user_id === provider_id) {
+      throw new AppError("You can't create an appointment with yourself");
+    }
+
+    /** Se agendamento for antes das 8am ou depois das 5pm, retorna erro */
+    if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 17) {
+      throw new AppError(
+        'You can only create appointments between 8am and 5pm',
+      );
+    }
+
     /**
      * Avalia se existe agendamento no mesmo horario enviado no corpo da
      * requisicao e retorna o primeiro appointment encontrado
@@ -59,6 +71,11 @@ class CreateAppointmentService {
     if (findAppointmentInSameDate) {
       /** Retorna erro status 400 */
       throw new AppError('This appointment is already booked');
+    }
+
+    /** Avalia se data ja passou */
+    if (isBefore(appointmentDate, Date.now())) {
+      throw new AppError("You can't create an appointment on a past date.");
     }
 
     /** Cria instância da classe de appointment */

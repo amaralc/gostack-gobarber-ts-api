@@ -23,10 +23,19 @@ describe('CreateAppointment', () => {
     /** Define variaveis locais para teste */
     const providerId = 'provider-id';
     const userId = 'user-id';
+    const YYYY = 2020;
+    const MM = 4;
+    const DD = 10;
+    const HH = 12;
+
+    /** Espiona funcao e cria mock com data definida */
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(YYYY, MM, DD, HH).getTime();
+    });
 
     /** Executa serviço */
     const appointment = await createAppointment.execute({
-      date: new Date(),
+      date: new Date(YYYY, MM, DD, HH + 1),
       provider_id: providerId,
       user_id: userId,
     });
@@ -40,7 +49,17 @@ describe('CreateAppointment', () => {
     /** Define variaveis locais para teste */
     const providerId = 'provider-id';
     const userId = 'user-id';
-    const appointmentDate = new Date();
+    const YYYY = 2020;
+    const MM = 4;
+    const DD = 10;
+    const HH = 12;
+
+    /** Espiona funcao e cria mock com data definida */
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(YYYY, MM, DD, HH).getTime();
+    });
+
+    const appointmentDate = new Date(YYYY, MM, DD, HH + 1);
 
     /** Executa serviço */
     await createAppointment.execute({
@@ -58,5 +77,90 @@ describe('CreateAppointment', () => {
 
     /** Avalia resultado */
     await expect(appointmentOnSameTime).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create an appointment in a past date', async () => {
+    /** Define variaveis locais para teste */
+    const providerId = 'provider-id';
+    const userId = 'user-id';
+    const YYYY = 2020;
+    const MM = 4;
+    const DD = 10;
+    const HH = 12;
+
+    /** Espiona funcao e cria mock com data definida */
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(YYYY, MM, DD, HH).getTime();
+    });
+
+    /** Executa serviço novamente para gerar erro */
+    const appointmentOnPastDate = createAppointment.execute({
+      date: new Date(YYYY, MM, DD, HH - 1),
+      provider_id: providerId,
+      user_id: userId,
+    });
+
+    /** Avalia resultado */
+    await expect(appointmentOnPastDate).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create an appointment with user_id equal to provider_id', async () => {
+    /** Define variaveis locais para teste */
+    const providerId = 'id';
+    const userId = 'id';
+    const YYYY = 2020;
+    const MM = 4;
+    const DD = 10;
+    const HH = 12;
+
+    /** Espiona funcao e cria mock com data definida */
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(YYYY, MM, DD, HH).getTime();
+    });
+
+    /** Executa serviço */
+    const appointmentWithSameUser = createAppointment.execute({
+      date: new Date(YYYY, MM, DD, HH + 1),
+      provider_id: providerId,
+      user_id: userId,
+    });
+
+    /** Avalia resultado */
+    await expect(appointmentWithSameUser).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create an appointment before 8am nor after 5pm', async () => {
+    /** Define variaveis locais para teste */
+    const providerId = 'provider-id';
+    const userId = 'user-id';
+    const YYYY = 2020;
+    const MM = 4;
+    const DD = 10;
+    const HH = 6;
+
+    /** Espiona funcao e cria mock com data definida */
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(YYYY, MM, DD, HH).getTime();
+    });
+
+    /** Cria agendamento antes do horario permitido */
+    const appointmentEarlierThanPossible = createAppointment.execute({
+      date: new Date(YYYY, MM, DD, HH + 1),
+      provider_id: providerId,
+      user_id: userId,
+    });
+
+    /** Executa serviço novamente para gerar erro */
+    const appointmentLaterthanPossible = createAppointment.execute({
+      date: new Date(YYYY, MM, DD, HH + 12),
+      provider_id: providerId,
+      user_id: userId,
+    });
+
+    /** Avalia resultado */
+    await expect(appointmentEarlierThanPossible).rejects.toBeInstanceOf(
+      AppError,
+    );
+    await expect(appointmentLaterthanPossible).rejects.toBeInstanceOf(AppError);
   });
 });
