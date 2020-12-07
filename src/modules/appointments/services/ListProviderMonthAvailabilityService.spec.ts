@@ -16,81 +16,101 @@ describe('ListProviderMonthAvailability', () => {
   });
 
   it('should be able to list the month availability of a provider', async () => {
+    /** Define variaveis locais para utilizar no teste */
+    const providerId = 'provider-id';
+    const userId = 'user-id';
+    const YYYY = 2020;
+    const MM = 4;
+    const DD = 20;
+    const HH = 8;
+
     /** Cria agendamentos */
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 3, 20, 8, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM - 1, DD, HH, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 8, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 9, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 1, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 10, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 2, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 11, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 3, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 12, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 4, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 13, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 5, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 14, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 6, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 15, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 7, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 16, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 8, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 20, 17, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD, HH + 9, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 21, 8, 0, 0),
+      provider_id: providerId,
+      user_id: userId,
+      date: new Date(YYYY, MM, DD + 1, HH, 0, 0),
     });
 
     /** Lista */
     const availability = await listProviderMonthAvailabilityService.execute({
-      provider_id: 'provider-id',
-      year: 2020,
-      month: 5,
+      provider_id: providerId,
+      year: YYYY,
+      month: MM + 1, // No javascript o mes comeca em zero
     });
 
     /** Avalia resultados */
-    expect(availability).toEqual(
-      expect.arrayContaining([
-        { day: 19, available: true },
-        { day: 20, available: false },
-        { day: 21, available: true },
-        { day: 22, available: true },
+    await expect(availability).toEqual(
+      await expect.arrayContaining([
+        { day: DD - 1, available: true },
+        { day: DD + 0, available: false },
+        { day: DD + 1, available: true },
+        { day: DD + 2, available: true },
       ]),
     );
   });

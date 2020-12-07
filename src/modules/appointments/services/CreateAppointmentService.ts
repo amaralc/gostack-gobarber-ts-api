@@ -16,6 +16,7 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 /** Cria interface para recebimento de dados */
 interface IRequest {
   provider_id: string;
+  user_id: string;
   date: Date;
 }
 
@@ -38,7 +39,11 @@ class CreateAppointmentService {
   ) {}
 
   /** Único método da classe, público, e que neste caso cria um appointment */
-  public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
+  public async execute({
+    provider_id,
+    user_id,
+    date,
+  }: IRequest): Promise<Appointment> {
     /** Data do agendamento definida como início da hora */
     const appointmentDate = startOfHour(date);
 
@@ -59,6 +64,7 @@ class CreateAppointmentService {
     /** Cria instância da classe de appointment */
     const appointment = await this.appointmentsRepository.create({
       provider_id,
+      user_id,
       date: appointmentDate,
     });
 

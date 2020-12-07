@@ -18,6 +18,7 @@ describe('ListProviderDayAvailability', () => {
   it('should be able to list the day availability of a provider', async () => {
     /** Define variaveis locais para reutilizacao no teste */
     const providerId = 'provider-id';
+    const userId = 'user-id';
     const YYYY = 2020;
     const MM = 4;
     const DD = 20;
@@ -26,11 +27,13 @@ describe('ListProviderDayAvailability', () => {
     /** Cria agendamentos */
     await fakeAppointmentsRepository.create({
       provider_id: providerId,
+      user_id: userId,
       date: new Date(YYYY, MM, DD, HH + 3, 0, 0),
     });
 
     await fakeAppointmentsRepository.create({
       provider_id: providerId,
+      user_id: userId,
       date: new Date(YYYY, MM, DD, HH + 4, 0, 0),
     });
 
@@ -49,8 +52,8 @@ describe('ListProviderDayAvailability', () => {
     });
 
     /** Avalia resultados */
-    expect(availability).toEqual(
-      expect.arrayContaining([
+    await expect(availability).toEqual(
+      await expect.arrayContaining([
         { hour: HH - 3, available: false },
         { hour: HH - 2, available: false },
         { hour: HH - 1, available: false },

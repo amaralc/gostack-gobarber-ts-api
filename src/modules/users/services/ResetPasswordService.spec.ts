@@ -49,8 +49,8 @@ describe('SendForgotPasswordEmail', () => {
     const updatedUser = await fakeUsersRepository.findById(user.id);
 
     /** Avalia resultado */
-    expect(generateHash).toHaveBeenCalledWith('123123');
-    expect(updatedUser?.password).toBe('123123');
+    await expect(generateHash).toHaveBeenCalledWith('123123');
+    await expect(updatedUser?.password).toBe('123123');
   });
 
   it('should not be able to reset the password with a non-existing token', async () => {

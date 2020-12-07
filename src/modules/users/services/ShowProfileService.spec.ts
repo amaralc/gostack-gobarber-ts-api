@@ -28,8 +28,8 @@ describe('UpdateProfile', () => {
     });
 
     /** Avalia resultado */
-    expect(profile.name).toBe('User One');
-    expect(profile.email).toBe('user1@email.com');
+    await expect(profile.name).toBe('User One');
+    await expect(profile.email).toBe('user1@email.com');
   });
 
   it('should not be able to show the profile of non-existing user', async () => {

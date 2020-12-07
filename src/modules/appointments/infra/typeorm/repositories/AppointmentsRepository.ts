@@ -41,6 +41,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
   /** Método para criar appointment */
   public async create({
     provider_id,
+    user_id,
     date,
   }: ICreateAppointmentDTO): Promise<Appointment> {
     /** Cria novo instância */
