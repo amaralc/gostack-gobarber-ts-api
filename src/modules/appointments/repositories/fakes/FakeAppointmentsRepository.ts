@@ -1,11 +1,12 @@
 import { v4 } from 'uuid';
-import { isEqual, getMonth, getYear } from 'date-fns';
+import { isEqual, getMonth, getYear, getDate } from 'date-fns';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
+import IFindAllInDayFromProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
 
 /** Cria classe implementando interface que permite troca de dependencias */
 class AppointmentsRepository implements IAppointmentsRepository {
@@ -20,6 +21,23 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
     /** Retorna instancia */
     return findAppointment;
+  }
+
+  public async create({
+    provider_id,
+    date,
+  }: ICreateAppointmentDTO): Promise<Appointment> {
+    /** Instancia classe Appointment */
+    const appointment = new Appointment();
+
+    /** Define conteúdo do objeto instanciado */
+    Object.assign(appointment, { id: v4(), date, provider_id });
+
+    /** Adiciona o objeto à lista */
+    this.appointments.push(appointment);
+
+    /** Retorna objeto */
+    return appointment;
   }
 
   public async findAllInMonthFromProvider({
@@ -39,21 +57,23 @@ class AppointmentsRepository implements IAppointmentsRepository {
     return appointments;
   }
 
-  public async create({
+  public async findAllInDayFromProvider({
     provider_id,
-    date,
-  }: ICreateAppointmentDTO): Promise<Appointment> {
-    /** Instancia classe Appointment */
-    const appointment = new Appointment();
+    year,
+    month,
+    day,
+  }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
+    /** Filtra lista */
+    const appointments = this.appointments.filter(
+      appointment =>
+        appointment.provider_id === provider_id &&
+        getDate(appointment.date) === day &&
+        getMonth(appointment.date) + 1 === month &&
+        getYear(appointment.date) === year,
+    );
 
-    /** Define conteúdo do objeto instanciado */
-    Object.assign(appointment, { id: v4(), date, provider_id });
-
-    /** Adiciona o objeto à lista */
-    this.appointments.push(appointment);
-
-    /** Retorna objeto */
-    return appointment;
+    /** Retorna lista */
+    return appointments;
   }
 }
 
