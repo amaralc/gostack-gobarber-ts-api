@@ -5,12 +5,14 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 
 /** Importa controller */
 import AppointmentsController from '@modules/appointments/infra/http/controllers/AppointmentsController';
+import ProviderAppointmentsController from '../controllers/ProviderAppointmentsController';
 
 /** Cria roteador de agendamentos */
 const appointmentsRouter = Router();
 
-/** Instancia controller */
+/** Instancia controllers */
 const appointmentsController = new AppointmentsController();
+const providerAppointmentsController = new ProviderAppointmentsController();
 
 /**
  * Aplica middleware para todas as rotas abaixo desta linha
@@ -21,17 +23,11 @@ const appointmentsController = new AppointmentsController();
  */
 appointmentsRouter.use(ensureAuthenticated);
 
-// /** Escuta método get na rota raiz e retorna todos os agendamentos */
-// appointmentsRouter.get('/', async (request, response) => {
-//   /** Cria variável para armazenar todos os agendamentos */
-//   const appointments = await appointmentsRepository.find();
-
-//   /** Retorna agendamentos */
-//   return response.json(appointments);
-// });
-
 /** Escuta método post na rota raiz (/) e responde com objeto json */
 appointmentsRouter.post('/', appointmentsController.create);
+
+/** Escuta outros metodos e aciona controllers */
+appointmentsRouter.get('/me', providerAppointmentsController.index);
 
 /** Exporta roteador de agendamentos */
 export default appointmentsRouter;
