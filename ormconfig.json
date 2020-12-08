@@ -19,7 +19,7 @@
   },
   {
     "name": "mongo",
-    "type": "mongo",
+    "type": "mongodb",
     "host": "localhost",
     "port": 27017,
     "database": "gostack_mongodb",
