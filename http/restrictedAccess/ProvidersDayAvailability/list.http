@@ -1,0 +1,10 @@
+GET {{baseUrl}}/providers/a5f6d34d-85ac-45d6-b71d-eef13e06e321/day-availability HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+{
+  "year": 2020,
+  "month": 12,
+  "day": 8
+}
