@@ -6,7 +6,8 @@ import ListProviderDayAvailabilityService from '@modules/appointments/services/L
 export default class ProviderDayAvailabilityController {
   public async index(request: Request, response: Response): Promise<Response> {
     /** Busca provider_id dentro da requisicao */
-    const { year, month, day, provider_id } = request.body;
+    const { provider_id } = request.params;
+    const { year, month, day } = request.body;
 
     /** Instancia serviço utilizando container de injecao de dependencias */
     const listProviderDayAvailabilityService = container.resolve(
