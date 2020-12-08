@@ -33,6 +33,6 @@ container.registerSingleton<IUserTokensRepository>(
 );
 
 container.registerSingleton<INotificationsRepository>(
-  'NotificationSRepository',
+  'NotificationsRepository',
   NotificationsRepository,
 );
