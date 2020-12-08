@@ -1,4 +1,4 @@
-import { startOfHour, isBefore, getHours } from 'date-fns';
+import { startOfHour, isBefore, getHours, format } from 'date-fns';
 
 import { injectable, inject } from 'tsyringe';
 
@@ -6,6 +6,7 @@ import AppError from '@shared/errors/AppError';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 
 /**
  * [x] Recebe informações
@@ -33,9 +34,12 @@ class CreateAppointmentService {
    * depois inicializá-la com this.variavel no constructor
    */
   constructor(
-    /** Injeta dependencia */
+    /** Injeta dependencias */
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository,
   ) {}
 
   /** Único método da classe, público, e que neste caso cria um appointment */
@@ -83,6 +87,15 @@ class CreateAppointmentService {
       provider_id,
       user_id,
       date: appointmentDate,
+    });
+
+    /** Formata data do agendamento */
+    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'");
+
+    /** Cria notificacao de agendamento */
+    await this.notificationsRepository.create({
+      recipient_id: provider_id,
+      content: `Novo agendamento para ${dateFormatted}`,
     });
 
     return appointment;
