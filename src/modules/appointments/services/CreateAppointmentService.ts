@@ -90,7 +90,7 @@ class CreateAppointmentService {
     });
 
     /** Formata data do agendamento */
-    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm");
+    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'");
 
     /** Cria notificacao de agendamento */
     await this.notificationsRepository.create({
