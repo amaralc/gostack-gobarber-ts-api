@@ -8,6 +8,7 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 /** Importa controller */
 import UserAvatarController from '@modules/users/infra/http/controllers/UserAvatarController';
 import UsersController from '@modules/users/infra/http/controllers/UsersController';
+import { celebrate, Segments, Joi } from 'celebrate';
 
 /** Cria roteador */
 const usersRouter = Router();
@@ -20,7 +21,17 @@ const userAvatarController = new UserAvatarController();
 const upload = multer(uploadConfig);
 
 /** Escuta método post na rota raiz (/) e responde com objeto json */
-usersRouter.post('/', usersController.create);
+usersRouter.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    },
+  }),
+  usersController.create,
+);
 
 /** Utiliza metodo patch para alterar apenas uma informacao (no caso, o avatar) */
 usersRouter.patch(
