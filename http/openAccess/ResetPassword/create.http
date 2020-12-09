@@ -3,5 +3,6 @@ Content-Type: application/json
 
 {
   "password": "123456",
+  "password_confirmation":"123456",
   "token": "b9a00922-d6be-4598-b086-4be106912df5"
 }
