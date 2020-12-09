@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 import CreateUserService from '@modules/users/services/CreateUserService';
+import { classToClass } from 'class-transformer';
 
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -21,10 +22,7 @@ export default class UsersController {
       password,
     });
 
-    /** Deleta informação do password da instancia de usuario criada */
-    delete user.password;
-
     /** Retorna usuario criado */
-    return response.status(200).json(user);
+    return response.status(200).json({ user: classToClass(user) });
   }
 }

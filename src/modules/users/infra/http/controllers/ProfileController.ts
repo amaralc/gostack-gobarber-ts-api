@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
@@ -16,8 +17,8 @@ export default class ProfileController {
     /** Executa servico */
     const user = await showProfileService.execute({ user_id });
 
-    /** Retorna resultado */
-    return response.json(user);
+    /** Retorna resultado aplicando class transform definida no model */
+    return response.json({ user: classToClass(user) });
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -40,7 +41,7 @@ export default class ProfileController {
       password,
     });
 
-    /** Retorna usuario criado */
-    return response.status(200).json(user);
+    /** Retorna usuario criado aplicando class transformation definida no model */
+    return response.status(200).json({ user: classToClass(user) });
   }
 }
