@@ -23,7 +23,7 @@
   "rest-client.environmentVariables": {
     "dev": {
       "baseUrl": "http://localhost:3333",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDczNzE2NzEsImV4cCI6MTYwNzQ1ODA3MSwic3ViIjoiZmFmZDZiZGYtNjQ0NS00ZGFhLTlmYTMtMjY0NWUxOGZlNzU3In0.Yp2jfqK9Rd6ZH_8c-QrY67131B7ijLOwkWtOaJAvaDg"
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDc0NzM1ODksImV4cCI6MTYwNzU1OTk4OSwic3ViIjoiZmFmZDZiZGYtNjQ0NS00ZGFhLTlmYTMtMjY0NWUxOGZlNzU3In0.fv3r0NBZDNRf6yTROstVQ7UqYVvM794-e-oIFTf31C0"
   },
   }
 }

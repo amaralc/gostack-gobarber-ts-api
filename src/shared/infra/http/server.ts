@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 /** Importa express */
 import express, { Request, Response, NextFunction } from 'express';
+import { errors } from 'celebrate';
 import 'express-async-errors';
 
 /**
@@ -38,6 +39,9 @@ app.use('/files', express.static(uploadConfig.uploadsFolder));
 
 /** Inicializa rotas */
 app.use(routes);
+
+/** Inicializa errors do celebrate */
+app.use(errors());
 
 /** Chama middleware de tratativa dos erros DEPOIS DAS ROTAS */
 app.use(
