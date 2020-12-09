@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import 'dotenv/config';
 /** Importa express */
 import express, { Request, Response, NextFunction } from 'express';
 import { errors } from 'celebrate';
