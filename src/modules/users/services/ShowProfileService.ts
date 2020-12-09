@@ -30,9 +30,6 @@ export default class ShowProfileService {
       throw new AppError('User not found');
     }
 
-    /** Deleta hash da senha */
-    delete user.password;
-
     /** Retorna usuario sem senha */
     return user;
   }

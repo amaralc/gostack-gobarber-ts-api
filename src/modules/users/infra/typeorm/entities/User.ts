@@ -7,6 +7,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+/** Importa opcoes de alteracao de classes antes do envio para frontend */
+import { Exclude, Expose } from 'class-transformer';
+
 /**
  * Utiliza experimental decorators (@) para definir que o model
  * User deve ser salvo dentro da tabela 'users'.
@@ -29,6 +32,7 @@ class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()
@@ -39,6 +43,13 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({ name: 'avatar_url' })
+  getAvatarUrl(): string | null {
+    return this.avatar
+      ? `${process.env.APP_API_URL}/files/${this.avatar}`
+      : null;
+  }
 }
 
 export default User;
