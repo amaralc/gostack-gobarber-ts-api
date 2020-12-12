@@ -60,6 +60,9 @@ app.use(
       });
     }
 
+    /** Imprime log do erro */
+    console.log(error.message);
+
     /** Se erro não foi definido na aplicação, retorna erro genérico */
     return response.status(500).json({
       status: 'error',

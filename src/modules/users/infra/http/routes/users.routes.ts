@@ -18,7 +18,7 @@ const usersController = new UsersController();
 const userAvatarController = new UserAvatarController();
 
 /** Cria instancia do multer para fazer upload */
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 
 /** Escuta método post na rota raiz (/) e responde com objeto json */
 usersRouter.post(
