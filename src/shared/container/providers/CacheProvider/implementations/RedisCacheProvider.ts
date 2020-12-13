@@ -3,13 +3,16 @@ import cacheConfig from '@config/cache';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 export default class RedisCacheProvider implements ICacheProvider {
+  /** Cria client do tipo Redis */
   private client: RedisClient;
 
   constructor() {
+    /** Define valor de client como novo redis */
     this.client = new Redis(cacheConfig.config.redis);
   }
 
   public async save(key: string, value: string): Promise<void> {
+    /** Salva par key, value no banco redis */
     await this.client.set(key, JSON.stringify(value));
   }
 
