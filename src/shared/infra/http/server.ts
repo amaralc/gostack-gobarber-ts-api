@@ -18,6 +18,9 @@ import uploadConfig from '@config/upload';
 /** Importa classe de erro */
 import AppError from '@shared/errors/AppError';
 
+/** Importa limitador de requisicoes */
+import rateLimiter from '@shared/infra/http/middlewares/rateLimiter';
+
 import routes from './routes';
 
 /** Importa conexão sem passar para nenhuma variável */
@@ -28,6 +31,9 @@ import '@shared/container';
 
 /** Define app como o retorno da função express() */
 const app = express();
+
+/** Usa limitador de requisicoes */
+app.use(rateLimiter);
 
 /** Usa cors no na aplicacao */
 app.use(cors());
