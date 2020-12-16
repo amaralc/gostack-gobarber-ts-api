@@ -7,7 +7,7 @@ export default class ProviderDayAvailabilityController {
   public async index(request: Request, response: Response): Promise<Response> {
     /** Busca provider_id dentro da requisicao */
     const { provider_id } = request.params;
-    const { year, month, day } = request.body;
+    const { year, month, day } = request.query;
 
     /** Instancia serviço utilizando container de injecao de dependencias */
     const listProviderDayAvailabilityService = container.resolve(
@@ -16,9 +16,9 @@ export default class ProviderDayAvailabilityController {
 
     /** Executa serviço */
     const availability = await listProviderDayAvailabilityService.execute({
-      year,
-      month,
-      day,
+      year: Number(year),
+      month: Number(month),
+      day: Number(day),
       provider_id,
     });
 

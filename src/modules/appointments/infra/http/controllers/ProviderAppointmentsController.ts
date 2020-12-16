@@ -12,7 +12,7 @@ export default class ProviderAppointmentsController {
   public async index(request: Request, response: Response): Promise<Response> {
     /** Busca provider_id e date de dentro do corpo da requisicao */
     const provider_id = request.user.id;
-    const { day, month, year } = request.body;
+    const { day, month, year } = request.query;
 
     /** Instancia serviço utilizando container de injecao de dependencias */
     const listProviderAppointmentsService = container.resolve(
@@ -21,9 +21,9 @@ export default class ProviderAppointmentsController {
 
     /** Executa serviço (cria appointment) */
     const appointments = await listProviderAppointmentsService.execute({
-      day,
-      month,
-      year,
+      day: Number(day),
+      month: Number(month),
+      year: Number(year),
       provider_id,
     });
 
