@@ -48,7 +48,11 @@ class AppointmentsRepository implements IAppointmentsRepository {
     date,
   }: ICreateAppointmentDTO): Promise<Appointment> {
     /** Cria novo instância */
-    const appointment = this.ormRepository.create({ provider_id, date });
+    const appointment = this.ormRepository.create({
+      provider_id,
+      user_id,
+      date,
+    });
 
     /** Salva instância no banco de dados */
     await this.ormRepository.save(appointment);
@@ -99,6 +103,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
             `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
+      relations: ['user'],
     });
 
     /** Retorna lista */
