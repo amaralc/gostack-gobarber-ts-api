@@ -7,7 +7,7 @@ export default interface IAppointmentsRepository {
   /** Define tipagem do metodo create */
   create(data: ICreateAppointmentDTO): Promise<Appointment>;
   /** Define tipo de parametro da interface */
-  findByDate(date: Date): Promise<Appointment | undefined>;
+  findByDate(date: Date, provider_id: string): Promise<Appointment | undefined>;
   /** Define tipo do metodo de listagem no mes */
   findAllInMonthFromProvider(
     data: IFindAllInMonthFromProviderDTO,

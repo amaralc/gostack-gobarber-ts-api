@@ -22,7 +22,10 @@ class AppointmentsRepository implements IAppointmentsRepository {
    * Método público para encontrar appointment a partir de uma data.
    * Método pode retornar tipo Appointment OU null
    */
-  public async findByDate(date: Date): Promise<Appointment | undefined> {
+  public async findByDate(
+    date: Date,
+    provider_id: string,
+  ): Promise<Appointment | undefined> {
     /** Encontra appointment em lista de appointments */
     // const findAppointment = this.appointments.find(appointment =>
     //   isEqual(date, appointment.date),
@@ -31,7 +34,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
     /** Chama método assincrono para encontrar um appointment */
     const findAppointment = await this.ormRepository.findOne({
       /** Onde a coluna 'date' é igual ao parâmetro 'date' */
-      where: { date },
+      where: { date, provider_id },
     });
 
     /** Retorna appointment encontrado e se não encontrar, retorna nulo */
