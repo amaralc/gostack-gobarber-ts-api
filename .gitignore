@@ -1,6 +1,6 @@
 # Custom
 tmp/*
-!tmp/.gitkeep
+!tmp/uploads/.gitkeep
 
 # Logs
 logs
