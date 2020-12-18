@@ -32,9 +32,6 @@ import '@shared/container';
 /** Define app como o retorno da função express() */
 const app = express();
 
-/** Usa limitador de requisicoes */
-app.use(rateLimiter);
-
 /** Usa cors no na aplicacao */
 app.use(cors());
 
@@ -43,6 +40,9 @@ app.use(express.json());
 
 /** Serve arquivos estaticos na rota files */
 app.use('/files', express.static(uploadConfig.uploadsFolder));
+
+/** Usa limitador de requisicoes */
+app.use(rateLimiter);
 
 /** Inicializa rotas */
 app.use(routes);
