@@ -26,11 +26,6 @@ class AppointmentsRepository implements IAppointmentsRepository {
     date: Date,
     provider_id: string,
   ): Promise<Appointment | undefined> {
-    /** Encontra appointment em lista de appointments */
-    // const findAppointment = this.appointments.find(appointment =>
-    //   isEqual(date, appointment.date),
-    // );
-
     /** Chama método assincrono para encontrar um appointment */
     const findAppointment = await this.ormRepository.findOne({
       /** Onde a coluna 'date' é igual ao parâmetro 'date' */
@@ -104,6 +99,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
         ),
       },
       relations: ['user'],
+      order: { date: 'ASC' },
     });
 
     /** Retorna lista */
