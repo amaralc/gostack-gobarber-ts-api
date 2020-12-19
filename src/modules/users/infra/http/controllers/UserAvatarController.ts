@@ -16,6 +16,6 @@ export default class UsersAvatarController {
     });
 
     /** Retorna mensagem de teste aplicando classTransforms */
-    return response.status(200).json({ user: classToClass(user) });
+    return response.status(200).json(classToClass(user));
   }
 }
