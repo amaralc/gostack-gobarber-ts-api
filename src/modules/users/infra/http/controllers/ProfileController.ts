@@ -42,6 +42,6 @@ export default class ProfileController {
     });
 
     /** Retorna usuario criado aplicando class transformation definida no model */
-    return response.status(200).json({ user: classToClass(user) });
+    return response.status(200).json(classToClass(user));
   }
 }
